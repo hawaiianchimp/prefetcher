@@ -15,6 +15,8 @@ Request Prefetcher::getRequest(u_int32_t cycle) {
 
 void Prefetcher::completeRequest(u_int32_t cycle) {
 	if (priority ==0){
+
+
 		_ready = false;
 	} else
 	{
