@@ -11,6 +11,7 @@ class Prefetcher {
 		bool _ready;
 		Request _nextReq;
 		int priority;
+		int pcfrequency[128]; 
 	
 	public:
 		Prefetcher();

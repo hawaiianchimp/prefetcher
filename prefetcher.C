@@ -25,8 +25,13 @@ void Prefetcher::completeRequest(u_int32_t cycle) {
 	}
 
 void Prefetcher::cpuRequest(Request req) { 
+
+	int addr = req.pc & 127;
+	pcfrequency[addr]++;
+
+	printf("addr=%u\n", addr);
 	priority=0;
-	if(!req.HitL1 && !req.HitL2)
+	if(!req.HitL1 && !req.HitL2 && false)
 	{
 
 		printf("-----------------------------------\n");
