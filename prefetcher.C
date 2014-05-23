@@ -22,8 +22,9 @@ Request Prefetcher::getRequest(u_int32_t cycle) {
 void Prefetcher::completeRequest(u_int32_t cycle) {
 		pcpointer++;
 		pcpointer %= 128;
-		if(cycle % 4 == 0)
+		if(_nextReq[pcpointer+1].addr == 0)
 		{
+			printf("%s\n", "false");
 			_ready = false;
 		}
 		//_nextReq.addr = _nextReq.addr +32;
@@ -35,7 +36,7 @@ void Prefetcher::cpuRequest(Request req) {
 		int addr = req.pc & 127;
 		pcfrequency[addr] = req.addr;
 
-		printf("addr=%u\n", addr);
+		//printf("addr=%u\n", addr);
 		for(int i=0;i<128;i++)
 		{
 			_nextReq[i].addr = pcfrequency[i];
