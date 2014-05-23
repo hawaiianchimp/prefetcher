@@ -9,9 +9,11 @@ struct Request;
 class Prefetcher {
 	private:
 		bool _ready;
-		Request _nextReq;
+		Request _nextReq[128];
 		int priority;
 		int pcfrequency[128]; 
+		int pcpointer;
+
 	
 	public:
 		Prefetcher();
