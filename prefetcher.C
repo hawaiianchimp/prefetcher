@@ -6,12 +6,11 @@ Prefetcher::Prefetcher(){
 }
 
 bool Prefetcher::hasRequest(u_int32_t cycle) {
-	return pcpointer < 128;
+	return _ready;
 }
 
 Request Prefetcher::getRequest(u_int32_t cycle) {
-	Request req = _nextReq[pcpointer];
-	return req;
+	return _nextReq;
 }
 
 void Prefetcher::completeRequest(u_int32_t cycle) {
@@ -21,25 +20,12 @@ void Prefetcher::completeRequest(u_int32_t cycle) {
 	{
 		_ready = true;
 		pcpointer++;
-		//_nextReq.addr = _nextReq.addr +32;
+		_nextReq.addr = _nextReq.addr +32;
 		priority = 0;
 	}
-	}
+}
 
 void Prefetcher::cpuRequest(Request req) { 
-
-	pcpointer = 0;
-	if(false)
-	{
-		int addr = req.pc & 127;
-		pcfrequency[addr] = req.addr;
-
-		printf("addr=%u\n", addr);
-		for(int i=0;i<128;i++)
-		{
-			_nextReq[i].addr = pcfrequency[i];
-		}
-	}	
 	
 	priority=0;
 	if(!req.HitL1 && !req.HitL2 && false)
@@ -57,16 +43,7 @@ void Prefetcher::cpuRequest(Request req) {
 	if(!_ready && !req.HitL1)
 	{
 		priority = 1;
-		for(int i=0; i<128;i++)
-		{
-			_nextReq[i].addr = req.addr + 32*(i+1);
-			int k =0;
-			for(int j=0;j<1000;j++)
-			{
-				k++;
-			}
-		}
-		//_nextReq.addr = req.addr + 32;
+		_nextReq.addr = req.addr + 32;
 		_ready = true;		
 	}
 
