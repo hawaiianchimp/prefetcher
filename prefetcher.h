@@ -13,6 +13,7 @@ class Prefetcher {
 		int priority;
 		int pcfrequency[128]; 
 		int pcpointer;
+		int stackpointer;
 
 	
 	public:

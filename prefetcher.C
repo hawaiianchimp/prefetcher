@@ -3,10 +3,12 @@
 #include "mem-sim.h"
 Prefetcher::Prefetcher(){
 	_ready = false;
+	pcpointer = 0;
+	stackpointer = 0;
 }
 
 bool Prefetcher::hasRequest(u_int32_t cycle) {
-	return pcpointer < 128;
+	return _ready;
 }
 
 Request Prefetcher::getRequest(u_int32_t cycle) {
@@ -15,19 +17,13 @@ Request Prefetcher::getRequest(u_int32_t cycle) {
 }
 
 void Prefetcher::completeRequest(u_int32_t cycle) {
-	if (priority ==0){
-		_ready = false;
-	} else
-	{
-		_ready = true;
+		//_ready = false;
 		pcpointer++;
+		pcpointer %= 127;
 		//_nextReq.addr = _nextReq.addr +32;
-		priority = 0;
-	}
 	}
 
 void Prefetcher::cpuRequest(Request req) { 
-
 	pcpointer = 0;
 	if(false)
 	{
@@ -41,7 +37,6 @@ void Prefetcher::cpuRequest(Request req) {
 		}
 	}	
 	
-	priority=0;
 	if(!req.HitL1 && !req.HitL2 && false)
 	{
 
@@ -54,20 +49,16 @@ void Prefetcher::cpuRequest(Request req) {
 		printf("HitL1=%u\n", req.HitL1);
 		printf("HitL2=%u\n", req.HitL2);
 	}	
-	if(!_ready && !req.HitL1)
+	if(!req.HitL1)
 	{
-		priority = 1;
-		for(int i=0; i<128;i++)
+		for(int i=0; i<8;i++)
 		{
-			_nextReq[i].addr = req.addr + 32*(i+1);
-			int k =0;
-			for(int j=0;j<1000;j++)
-			{
-				k++;
-			}
+			_nextReq[stackpointer+i].addr = req.addr + 32*(i+1);
+			stackpointer++;
+			stackpointer %= 127;
+			_ready = true;
 		}
-		//_nextReq.addr = req.addr + 32;
-		_ready = true;		
+		//_nextReq.addr = req.addr + 32;	
 	}
 
 }
