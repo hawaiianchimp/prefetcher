@@ -13,6 +13,7 @@ bool Prefetcher::hasRequest(u_int32_t cycle) {
 
 Request Prefetcher::getRequest(u_int32_t cycle) {
 
+	for(;_nextReq[pcpointer].addr == 0;pcpointer++);
 	printf("_nextReq[%u] = %u\n", pcpointer, _nextReq[pcpointer].addr);
 	Request req = _nextReq[pcpointer];
 	return req;
@@ -20,8 +21,8 @@ Request Prefetcher::getRequest(u_int32_t cycle) {
 
 void Prefetcher::completeRequest(u_int32_t cycle) {
 		pcpointer++;
-		pcpointer %= 127;
-		if(_nextReq[pcpointer].addr == 0)
+		pcpointer %= 128;
+		if(cycle % 4 == 0)
 		{
 			_ready = false;
 		}
@@ -53,13 +54,13 @@ void Prefetcher::cpuRequest(Request req) {
 		printf("HitL1=%u\n", req.HitL1);
 		printf("HitL2=%u\n", req.HitL2);
 	}	
-	if(!req.HitL1)
+	if(!_ready && !req.HitL1)
 	{
 		for(int i=0; i<4;i++)
 		{
 			_nextReq[stackpointer+i].addr = req.addr + 32*(i+1);
 			stackpointer++;
-			stackpointer %= 127;
+			stackpointer %= 128;
 			printf("sp=%u\n", stackpointer);
 			_ready = true;
 		}
