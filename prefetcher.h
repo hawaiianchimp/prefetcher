@@ -10,7 +10,7 @@ struct Request;
 class Prefetcher {
 	private:
         u_int32_t hashindex[1024];
-        Request req[2];
+        Request req[5];
     int hashprev;
     u_int32_t reqhead;
     u_int32_t reqtail;

@@ -19,7 +19,7 @@ Prefetcher::Prefetcher(){
 	reqhead = 0;
 	reqtail = 0;
 	reqsize = 0;
-	reqcapacity = 2;
+	reqcapacity = 5;
     prefetchtrue = 0;
     prefetchaddr = 0;
 }
