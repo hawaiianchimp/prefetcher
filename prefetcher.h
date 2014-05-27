@@ -1,5 +1,6 @@
 #ifndef PREFETCHER_H
 #define PREFETCHER_H
+#define SIZE 4
 
 #include <sys/types.h>
 #include "mem-sim.h"
@@ -8,12 +9,16 @@ struct Request;
 
 class Prefetcher {
 	private:
-		bool _ready;
-		Request _nextReq[128];
-		int priority;
-		int pcfrequency[128]; 
-		int pcpointer;
-		int stackpointer;
+        u_int32_t hashindex[1024];
+        Request req[2];
+    int hashprev;
+    u_int32_t reqhead;
+    u_int32_t reqtail;
+    u_int32_t reqsize;
+    u_int32_t reqcapacity;
+    u_int32_t prefetchaddr;
+    u_int32_t prefetchtrue;
+    
 
 	
 	public:
@@ -31,7 +36,9 @@ class Prefetcher {
 		 * This function is called whenever the CPU references memory.
 		 * Note that only the addr, pc, load, issuedAt, and HitL1 should be considered valid data
 		 */
-		void cpuRequest(Request req); 
+		void cpuRequest(Request req);
+        void addToHash(u_int32_t mem);
+    void prefetch(u_int32_t index);
 };
 
 #endif
