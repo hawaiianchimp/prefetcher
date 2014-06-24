@@ -9,8 +9,10 @@ struct Request;
 
 class Prefetcher {
 	private:
-        u_int32_t hashindex[1024];
+        u_int32_t hashindex[1024]; //4 KB state
         Request req[5];
+
+    //28 bytes state
     int hashprev;
     u_int32_t reqhead;
     u_int32_t reqtail;
